@@ -38,17 +38,29 @@ function myFunction() {
 }
 
 function getCurrentPrice(content) {
-    var fromText = 'id="Nse_Prc_tick"><strong>';
-    var toText = '</strong>';
-
-    //Thanks to https://www.kutil.org/2016/01/easy-data-scrapping-with-google-apps.html for the Parser library.
-    var scraped = Parser
+  
+  //Thanks to https://www.kutil.org/2016/01/easy-data-scrapping-with-google-apps.html for the Parser library.
+  
+  //Find NSE Outer Section
+  var fromNSEText = 'id="div_nse_livebox_wrap"';
+  var toNSEText = 'span_price_change_prcnt';
+  var scrapedOuterNSE = Parser
                     .data(content)
-                    .from(fromText)
-                    .to(toText)
+                    .from(fromNSEText)
+                    .to(toNSEText)
                     .build();
-    //Logger.log(scraped);
-    return scraped;
+    
+  //Find NSE Inner Section
+  var fromNSEPriceText = 'clr">';
+  var toNSEPriceText = '</span>';
+  var scraped = Parser
+                    .data(content)
+                    .from(fromNSEPriceText)
+                    .to(toNSEPriceText)
+                    .build();
+  
+  //Logger.log(scraped);
+  return scraped;
 }
 
 function getHTML(url) {
